@@ -3,7 +3,7 @@ const TeachableMachine = require("@sashido/teachablemachine-node");
 const { formatDate } = require("./format_date");
 
 const app = express();
-const port = 3000;
+const port = 4000;
 
 app.use(express.static('public'))
 app.use('/public', express.static('public'));
@@ -29,14 +29,14 @@ const model = new TeachableMachine({
   modelUrl: "https://teachablemachine.withgoogle.com/models/5W6yzY_mS/"
 });
 
-app.get("/gi", upload.single("foto"), async (req, res) => {
+app.post("/classify", upload.single("foto"), async (req, res) => {
 
   const foto = req.file !== undefined ? req.body.foto = req.file.filename : ''
 
   console.log(JSON.stringify(req.body));
 
   return model.classify({
-    imageUrl: `http://localhost:3000/public/uploads/${foto}`,
+    imageUrl: `http://localhost:4000/public/uploads/${foto}`,
   }).then((predictions) => {
     console.log(predictions);
     return res.json({
